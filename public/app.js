@@ -17,3 +17,7 @@ motion.addEventListener('change',()=>{paused=motion.matches;sync();});
 addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(render);}},{passive:true});
 addEventListener('resize',render);
 sync();
+
+const requestedTier = new URLSearchParams(location.search).get("tier");
+const tierSelect = document.querySelector("#tier");
+if(tierSelect && [...tierSelect.options].some(option => option.value === requestedTier)) tierSelect.value = requestedTier;

@@ -43,3 +43,9 @@ The workbook uses Inter and the same approved logo. Its questions are a draft re
 - Review the draft workbook and illustrative examples.
 
 No analytics, external embeds, autoplay video, or production AI integrations are included. Examples are illustrative, with human review explicit. Background motion can be paused and respects reduced-motion settings. No changes have been deployed to Netlify by this branch.
+
+## Forest green design update
+
+The website uses forest #203E32, muted green #456956, sage #DCE6DF and warm ivory #F8F8F3. The approved multicolour artwork and the original PDF remain intact. Two AI-generated editorial environment photographs are stored locally as optimised WebP assets; these illustrate business settings and do not depict clients. Background layers are CSS, with reduced-motion and pause support.
+
+The Support page includes Advice (free), Solo ($400/month, one agent or skill), Small Team ($750/month, up to three) and Big Team ($1,100/month, up to six), carried across from the supplied AI offer. Prices are AUD; tax treatment and final commercial terms should be confirmed with the other pre-launch content. Tier links preselect the enquiry option without creating a subscription.
