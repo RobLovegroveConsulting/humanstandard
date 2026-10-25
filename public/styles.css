@@ -7,3 +7,6 @@
 @media(max-width:480px){.tiergrid{grid-template-columns:1fr}.tier .for{min-height:0}.tier .eyebrow{min-height:0}.tier{padding:30px 25px}.tier h3{font-size:36px}.calendar-layout{grid-template-columns:1fr}.calendar ul{display:none}.product-tile{min-height:240px}.hero{min-height:760px}.hero h1{font-size:clamp(45px,10.5vw,58px)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}.hero-art,.orbit{transform:none!important}}
 select{display:block;width:100%;font:inherit;font-size:14px;padding:13px 10px;margin-top:8px;color:var(--ink);background:white;border:1px solid #9ab09f;border-radius:5px}select:focus-visible{outline:3px solid #ac7927;outline-offset:4px}.tier .qa{color:var(--muted)}.tier .qa strong{display:block}.tier .qa:empty{display:none}
+
+/* Website logo backing matches the forest sections. */
+.book{background:var(--forest);border-color:#456956;border-left-color:#315542}
