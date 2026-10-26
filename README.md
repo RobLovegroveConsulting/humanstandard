@@ -59,3 +59,11 @@ The Solutions page presents five fictional examples: social content, website rep
 Main marketing copy lives in `public/index.html`, `public/approach/index.html`, `public/solutions/index.html`, `public/support/index.html` and `public/resources/index.html`. Support FAQs use native `<details>` elements. Package links preselect the enquiry tier, including free Advice. Pricing and package limits remain the agreed four-tier offer.
 
 Download paths: `/downloads/map-your-business-for-ai.pdf` (22 pages) and `/downloads/marketing-pr-template-pack.pdf` (12 pages). Keep these stable when replacing a resource so existing download links continue to work.
+
+### Resource lead capture
+
+Homepage and Resources download buttons open a native accessible dialog, with `/download/?resource=workbook` and `?resource=templates` as fallback pages. Required name/email plus resource and request-page fields are submitted to the `resource-download` Netlify form. A file link is shown only after an HTTP-successful submission. No personal data is sent to GitHub or saved to browser storage. No mailing-list subscription is created. The privacy notice covers this collection.
+
+Netlify account setup: enable **Forms > Form detection**, then deploy the branch again. Confirm `resource-download` appears under Forms, submit a legitimate test, and check Verified/Spam submissions. Entries can be exported to CSV. Optional email notifications are configured in **Forms > Submission notifications**; these are account settings, not repository settings. Do not claim end-to-end collection is working until the form is detected and a submitted entry is visible in the account.
+
+This is a lead-capture workflow, not secure file access: the static PDFs still have public URLs. Private file delivery would need a server-side storage/delivery service. Existing bookmarked PDF URLs remain valid.
