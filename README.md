@@ -8,7 +8,7 @@ First review build of the independent small-business AI services website.
 - `/approach/` Approach
 - `/solutions/` Solutions and illustrative workflows
 - `/support/` Support and enquiry form
-- `/resources/` Four-page printable workbook download
+- `/resources/` 22-page fillable workbook and separate 12-worksheet marketing/PR template pack
 
 Additional pages: `/thanks/` and a clearly marked draft `/privacy/`.
 
@@ -31,7 +31,7 @@ Preview URLs may be publicly accessible. This build sets `noindex` while in revi
 
 `public/assets/approved-dark-master.png` is the exact supplied Full_Colour_Dark_Master.png. `logo-dark.png` and `brand-symbol.png` are crops removing surrounding background only, retaining the complete artwork. Do not redraw or regenerate these assets. Inter is self-hosted under the included SIL Open Font License. Website palette: #0B132B, #2DD4BF, #6386F1, #A855F7, #F97316, #F43F5E.
 
-The workbook uses Inter and the same approved logo. Its questions are a draft resource for review; it is printable, not an interactive form.
+Both resources use Inter and the approved green identity. They are undated A4 PDFs with interactive text fields and can also be printed. Blank planning date fields remain for users to complete. The full workbook includes the 12 marketing/PR templates; the separate pack provides those same worksheets for reuse.
 
 ## Before launch
 
@@ -50,10 +50,12 @@ The website uses forest #203E32, muted green #456956, sage #DCE6DF and warm ivor
 
 The Support page includes Advice (free), Solo ($400/month, one agent or skill), Small Team ($750/month, up to three) and Big Team ($1,100/month, up to six), carried across from the supplied AI offer. Prices are AUD; tax treatment and final commercial terms should be confirmed with the other pre-launch content. Tier links preselect the enquiry option without creating a subscription.
 
-Website headers, footers and workbook previews use `logo-green.svg`, a forest-green-background version of the approved identity. The original source master is retained.
+Website headers and footers use `logo-green.svg`, a forest-green-background version of the approved identity. Resource previews show the actual PDF cover and social planner, exported as WebP. The original source master is retained.
 
 ### Illustrative solutions
 
 The Solutions page presents five fictional examples: social content, website reporting, video planning, PR and advertising. The homepage previews three and links to their sections. Each example is labelled as illustrative, with scope and review explained in HTML beside the image. Images are complete, uncropped WebP exports with 800px responsive variants under `public/assets/example-*`; click-through links open the larger version. The mock-ups do not represent a live application or actual client performance.
 
 Main marketing copy lives in `public/index.html`, `public/approach/index.html`, `public/solutions/index.html`, `public/support/index.html` and `public/resources/index.html`. Support FAQs use native `<details>` elements. Package links preselect the enquiry tier, including free Advice. Pricing and package limits remain the agreed four-tier offer.
+
+Download paths: `/downloads/map-your-business-for-ai.pdf` (22 pages) and `/downloads/marketing-pr-template-pack.pdf` (12 pages). Keep these stable when replacing a resource so existing download links continue to work.
