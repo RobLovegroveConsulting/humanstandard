@@ -68,8 +68,8 @@ Netlify account setup: enable **Forms > Form detection**, then deploy the branch
 
 This is a lead-capture workflow, not secure file access: the static PDFs still have public URLs. Private file delivery would need a server-side storage/delivery service. Existing bookmarked PDF URLs remain valid.
 
-### Draft: The Humans
+### The Humans
 
-`/the-humans/` introduces Rob and Sam with a playful human-first opening, editorial bios, complete uncropped portraits, Queensland/global SME positioning and a link to the broader corporate work at roblovegrove.com. Main-navigation links and the responsive breakpoint are prepared across the review branch. This draft must not be merged into `design/first-build` until approved for production.
+`/the-humans/` introduces Rob and Sam with a playful human-first opening, editorial bios, complete uncropped portraits, Queensland/global SME positioning and a link to the broader corporate work at roblovegrove.com. The Humans appears in the main navigation across the site, with a responsive menu breakpoint for the extra link. Links to Rob Lovegrove Consulting and the two source bio pages open in new tabs with `noopener noreferrer`.
 
 Bio/photo sources: https://roblovegrove.com/about/roblovegrove/ and https://roblovegrove.com/about/samlovegrove/. The current team positioning of more than 30 years' experience follows Rob's brief rather than the older years listed in those source bios. Source portrait URLs: `/wp-content/uploads/2023/10/Rob-Lovegrove-IMG_1511-3.jpg` and `/wp-content/uploads/2023/10/Samlovegrove.jpg` on roblovegrove.com. The portraits are self-hosted as WebP without cropping.
