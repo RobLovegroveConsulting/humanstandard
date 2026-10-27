@@ -25,19 +25,18 @@
   }
   function preferences() {
     if(document.querySelector('#location-choice')) return;
-    const dialog=document.createElement('dialog');
+    const dialog=document.createElement('section');
     dialog.id='location-choice';
+    dialog.setAttribute('role','region');
     dialog.setAttribute('aria-labelledby','location-choice-title');
-    dialog.innerHTML='<h2 id="location-choice-title">Share your location?</h2><p>Help The Human Standard understand where visitors use this website. If you agree, we request your most accurate available location and store your coordinates, accuracy estimate, page path and time with Netlify. Rob can review the records in a private location dashboard and weekly CSV report. No report emails are sent. Records are retained for approximately 90 days on the website.</p><p>Sharing is optional. You can browse normally without it and stop future collection using Location preferences in the footer. Your location is not linked to enquiry forms or sent to Google Analytics. <a href="/privacy/#visitor-location">Privacy details</a>.</p><div><button type="button" class="button" data-choice="allow">Share location</button> <button type="button" class="button outline" data-choice="decline">Do not share</button></div>';
+    dialog.innerHTML='<div class="location-banner-copy"><h2 id="location-choice-title">Share your location?</h2><p>Help The Human Standard understand where visitors are accessing this website. If you agree, your device-reported location (which may be precise) is stored securely with our hosting provider, Netlify, for approximately 90 days to allow Rob and the team to understand where future live events and roadshows might occur. No IP address, name, email address or persistent visitor identifier is stored in these location records.</p><p>Sharing is optional, or you can opt out of future collection via Location preferences in the footer. Your location is not linked to enquiry forms or sent to Google Analytics. <a href="/privacy/#visitor-location">Privacy details</a>.</p></div><div class="location-banner-actions"><button type="button" class="button" data-choice="allow">Share location</button><button type="button" class="button outline" data-choice="decline">Do not share</button></div>';
     dialog.addEventListener('click', event => {
       const choice=event.target.closest('[data-choice]')?.dataset.choice;
       if(!choice) return;
-      setChoice(choice); dialog.close();
+      setChoice(choice); dialog.remove();
       if(choice==='allow') capture();
     });
-    dialog.addEventListener('cancel',()=>setChoice('decline'));
-    dialog.addEventListener('close',()=>dialog.remove());
-    document.body.append(dialog); dialog.showModal();
+    document.body.append(dialog);
   }
   const footer=document.querySelector('.site-footer > div');
   if(footer) {
