@@ -73,3 +73,29 @@ This is a lead-capture workflow, not secure file access: the static PDFs still h
 `/the-humans/` introduces Rob and Sam with a playful human-first opening, editorial bios, complete uncropped portraits, Queensland/global SME positioning and a link to the broader corporate work at roblovegrove.com. The Humans appears in the main navigation across the site, with a responsive menu breakpoint for the extra link. Links to Rob Lovegrove Consulting and the two source bio pages open in new tabs with `noopener noreferrer`.
 
 Bio/photo sources: https://roblovegrove.com/about/roblovegrove/ and https://roblovegrove.com/about/samlovegrove/. The current team positioning of more than 30 years' experience follows Rob's brief rather than the older years listed in those source bios. Source portrait URLs: `/wp-content/uploads/2023/10/Rob-Lovegrove-IMG_1511-3.jpg` and `/wp-content/uploads/2023/10/Samlovegrove.jpg` on roblovegrove.com. The portraits are self-hosted as WebP without cropping.
+
+
+### Location-aware analytics
+
+GA4 `G-WS3JRYW0HP` is enabled only on production hosts. The same-origin
+`/analytics-region.json` Edge Function uses Netlify's country code and returns only
+consent/opt-out booleans. It does not return or log the visitor's country, IP or
+precise geo. Responses are private/no-store; do not cache by URL alone or trust a
+request header/query parameter as a country override.
+
+Australia, New Zealand and the US use opt-out analytics for this general business
+site with advertising/Google Signals disabled. Other regions, including the EEA,
+UK and Switzerland, and geo failures default to opt-in. This is a conservative
+reviewed-region policy, not a claim that every other country legally requires a
+banner. Review this allowlist if audience, tracking, legal requirements or Google
+product use changes. GPC/DNT and an existing decline prevent analytics everywhere.
+A prior decline is never reset during migration. Automatic activation is not
+stored as affirmative consent, so travel to an opt-in region triggers the prompt.
+The footer preference control can stop analytics, remove its first-party cookies
+and reload to unload the tag. Form content is never passed to GA; form/search
+auto-measurement is disabled in this stream. Google Analytics remains subject to
+its account agreements and international transfer obligations.
+
+Run `node --test scripts/analytics.test.mjs` for region and preference regression
+checks, alongside `npm run check`. Deploy from `design/first-build` and verify the
+region endpoint, tag loading and the consent-sensitive path before reporting live.

@@ -17,3 +17,7 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+[[edge_functions]]
+  function = "analytics-region"
+  path = "/analytics-region.json"
