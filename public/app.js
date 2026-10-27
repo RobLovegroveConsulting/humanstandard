@@ -105,3 +105,9 @@ document.querySelectorAll('.download-flow').forEach(flow=>{
   });
   form.elements.name.addEventListener('input',()=>form.elements.name.setCustomValidity(''));
 });
+
+// Optional location reporting is isolated from analytics and enquiry forms.
+const locationScript=document.createElement('script');
+locationScript.src='/location.js';
+locationScript.defer=true;
+document.head.append(locationScript);
