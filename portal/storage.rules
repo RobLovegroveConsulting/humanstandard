@@ -1,0 +1,12 @@
+rules_version = '2';
+service firebase.storage {
+ match /b/{bucket}/o {
+  function member(w) { return request.auth != null && request.auth.token.email_verified == true && firestore.get(/databases/(default)/documents/workspaces/$(w)/members/$(request.auth.uid)).data.active == true; }
+  function editor(w) { return member(w) && firestore.get(/databases/(default)/documents/workspaces/$(w)/members/$(request.auth.uid)).data.role in ['admin','editor']; }
+  match /workspaces/{w}/clients/{c}/assets/{id} {
+   allow read: if member(w);
+   allow create: if editor(w) && request.resource.size > 0 && request.resource.size <= 20*1024*1024 && request.resource.contentType in ['image/png','image/jpeg','image/webp','application/pdf'];
+   allow delete: if editor(w);
+  }
+ }
+}

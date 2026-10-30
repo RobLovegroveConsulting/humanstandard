@@ -1,0 +1,29 @@
+name: Portal checks
+on:
+  pull_request:
+    paths: ['portal/**', '.github/workflows/portal-checks.yml']
+permissions:
+  contents: read
+jobs:
+  portal:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci
+      - run: npm test
+      - run: npm run test:rules
+      - run: npm run test:storage
+      - run: npm run test:queue
+      - run: npm run build
