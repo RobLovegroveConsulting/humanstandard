@@ -4,7 +4,7 @@ Development branch only. The public Netlify site has not been deployed or modifi
 
 ## Repository finding
 
-The default branch contained only README.md at commit 0aa716469416ff7cd28f78e3a01904f669ce88da. It is not a backup of the current live website. Do not point Netlify production at this branch or merge with an automatic production deployment until the current public source/build configuration is recovered.
+The default branch contained only README.md at commit 0aa716469416ff7cd28f78e3a01904f669ce88da. Website source and Netlify configuration exist on `design/first-build` (78664e2a91c81b9512c626996b3977666c7680a7), with another draft on `draft/the-humans`. The fetched live homepage did not exactly match the first-build homepage. Confirm the active Netlify source branch and deployed revision before integration. Do not point Netlify production at this isolated portal branch or merge it into a production branch before staging tests.
 
 ## Implemented
 
@@ -52,7 +52,7 @@ Before staging use:
 
 Build output is `portal/dist/portal/`. Stage on a separate test site, with application authentication and Firebase rules active. A noindex tag is present but is not access control. Test before any production merge/deploy.
 
-Once the live website's source and Netlify build are recovered, merge only the built `/portal/` directory into the retained public publish tree. Do not replace the root publish directory with this project's output. Add path-scoped headers for `/portal/*`: `X-Robots-Tag: noindex, nofollow, noarchive`, `Cache-Control: no-store`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `Content-Security-Policy` tested against required Firebase endpoints with `frame-ancestors 'none'`. Keep the public site's headers/redirects intact. Use a path-scoped SPA rewrite only if nested client routes are later introduced; current app uses in-memory tabs.
+Once the active live website source revision and Netlify build are confirmed, merge only the built `/portal/` directory into the retained public publish tree. Do not replace the root publish directory with this project's output. Add path-scoped headers for `/portal/*`: `X-Robots-Tag: noindex, nofollow, noarchive`, `Cache-Control: no-store`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `Content-Security-Policy` tested against required Firebase endpoints with `frame-ancestors 'none'`. Keep the public site's headers/redirects intact. Use a path-scoped SPA rewrite only if nested client routes are later introduced; current app uses in-memory tabs.
 
 ## Integration preparation
 
