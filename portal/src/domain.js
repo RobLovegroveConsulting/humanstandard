@@ -1,8 +1,5 @@
-export const initialClients = [
-  "Cumquats Australia",
-  "Esk Cheap Shop",
-  "Mitre 10 Toogoolawah",
-];
+export const pilotClientId = "esk-cheap-shop";
+export const initialClients = ["Esk Cheap Shop"];
 export const modules = [
   { id: "social", name: "Social Workforce", enabled: true },
   { id: "insights", name: "Insights & reporting", enabled: false },

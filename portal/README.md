@@ -14,7 +14,7 @@ The default branch contained only README.md at commit 0aa716469416ff7cd28f78e3a0
 - Rob (admin) and Sam (editor) are intended operators of every client. Client users are not supported by this foundation; do not invite customers as workspace members.
 - Client onboarding/profile editing, tone instructions, colour palettes.
 - Authenticated brand file upload/download, scoped per client. No permanent download-token URLs.
-- Facebook and Instagram text draft queue with submit, approve, return/reopen transitions. No scheduling or engagement calls are made.
+- Facebook and Instagram draft approval workflow, with approved JPEG selection and an Esk Cheap Shop-only scheduling API/worker implementation. Live publishing is disabled; no account is connected. See `PILOT.md`.
 - Append-only application activity records and latest-100 activity view. Records use server timestamps and enforce actor identity; browser-generated records are operational logs, not a tamper-proof compliance audit. Future provider actions must log from trusted server code.
 - Module registry for future workforce modules.
 
@@ -42,7 +42,7 @@ Before staging use:
 
 1. Verify database creation and keep deny-all rules until tests pass.
 2. Enable email/password Authentication. Create each operator's individual account through a secure invitation/admin process; operators choose their own passwords. Verify email ownership. Do not paste passwords into chat or commit them.
-3. Confirm Rob and Sam's account identities and approve their workspace access. `scripts/bootstrap.mjs` looks up the two known addresses and refuses disabled/unverified users. Run only with authorised Application Default Credentials after review. It seeds three clients idempotently without replacing existing profiles. Firebase admin SDK bypasses rules: protect its runtime.
+3. Confirm Rob and Sam's account identities and approve their workspace access. `scripts/bootstrap.mjs` looks up the two known addresses and refuses disabled/unverified users. Run only with authorised Application Default Credentials after review. It seeds only the Esk Cheap Shop pilot idempotently without replacing existing profiles. Firebase admin SDK bypasses rules: protect its runtime.
 4. Activate Blaze billing to provision Cloud Storage; use Sydney when available. Add usage/budget alerts (alerts do not cap expenditure). This is an account-owner billing step.
 5. Deploy tested rules with `node node_modules/firebase-tools/lib/bin/firebase.js deploy --only firestore:rules,storage --project human-standard-workspace` using authorised credentials. Storage cross-service Firestore rule reads may require Google service-agent permissions; review that grant explicitly.
 6. Configure bucket CORS for the exact staging and production origins and GET; do not use wildcard origins. Required for authenticated browser blob downloads. Set project API-key restrictions for required Firebase APIs and intended origins after testing.
@@ -56,4 +56,4 @@ Once the active live website source revision and Netlify build are confirmed, me
 
 ## Integration preparation
 
-Read `INTEGRATIONS.md`. Connections are deliberately disabled. This foundation is not a functioning autonomous AI marketing service yet. Scheduling, analytics, AI generation, monitoring, reporting exports and social engagement remain to be implemented after vendor access is verified.
+Read `INTEGRATIONS.md`. Connections are deliberately disabled. This foundation is not a functioning autonomous AI marketing service yet. The pilot scheduling implementation requires staging and account verification before activation. Analytics, AI generation, monitoring, reporting exports and social engagement remain to be implemented. See `PILOT.md` for the exact supported slice and prerequisites.

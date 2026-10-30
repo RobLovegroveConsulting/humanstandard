@@ -109,6 +109,34 @@ try {
       createdAt: serverTimestamp(),
     }),
   );
+  await assertFails(
+    setDoc(doc(rob, `${base}/publishJobs/forged`), {
+      clientId: "esk-cheap-shop",
+      status: "queued",
+    }),
+  );
+  await assertFails(
+    setDoc(doc(rob, `${base}/integrations/meta-esk`), {
+      active: true,
+      publishingVerified: true,
+    }),
+  );
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), `${base}/publishJobs/test_p1`), {
+      status: "queued",
+    });
+  });
+  await assertFails(
+    updateDoc(p, { status: "draft", updatedAt: serverTimestamp() }),
+  );
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), `${base}/publishJobs/test_p1`), {
+      status: "cancelled",
+    });
+  });
+  await assertSucceeds(
+    updateDoc(p, { status: "draft", updatedAt: serverTimestamp() }),
+  );
   console.log(
     "PASS: anonymous, non-member, unverified, cross-workspace, privilege escalation, viewer, approval bypass, post mutation and forged actor checks.",
   );

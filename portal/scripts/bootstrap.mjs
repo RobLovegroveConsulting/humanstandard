@@ -27,11 +27,7 @@ for (const { user, role } of users)
     { active: true, role },
     { merge: true },
   );
-for (const [id, name] of [
-  ["cumquats-australia", "Cumquats Australia"],
-  ["esk-cheap-shop", "Esk Cheap Shop"],
-  ["mitre-10-toogoolawah", "Mitre 10 Toogoolawah"],
-]) {
+for (const [id, name] of [["esk-cheap-shop", "Esk Cheap Shop"]]) {
   const d = db.doc(`workspaces/human-standard/clients/${id}`);
   if (!(await d.get()).exists)
     batch.create(d, {
@@ -45,4 +41,4 @@ for (const [id, name] of [
     });
 }
 await batch.commit();
-console.log("Workspace membership and initial clients prepared.");
+console.log("Workspace membership and Esk Cheap Shop pilot prepared.");

@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes, getBlob, deleteObject } from "firebase/storage";
 import { db, storage, auth } from "./firebase";
-import { profile, validateFile, canTransition } from "./domain";
+import { profile, validateFile, canTransition, pilotClientId } from "./domain";
 const root = "workspaces/human-standard";
 export const path = (...parts) => [root, ...parts].join("/");
 export async function membership() {
@@ -38,7 +38,9 @@ export async function saveClient(data, id) {
   const value = profile(data);
   const target = id
     ? doc(db, path("clients", id))
-    : doc(collection(db, path("clients")));
+    : value.name.toLowerCase() === "esk cheap shop"
+      ? doc(db, path("clients", pilotClientId))
+      : doc(collection(db, path("clients")));
   const batch = writeBatch(db);
   batch.set(
     target,
@@ -99,6 +101,7 @@ export async function saveDraft(clientId, data) {
   batch.set(target, {
     text: data.text.trim(),
     platform: data.platform,
+    assetId: data.assetId || null,
     status: "draft",
     createdBy: auth.currentUser.uid,
     updatedBy: auth.currentUser.uid,
@@ -117,7 +120,15 @@ export async function transition(clientId, post, status) {
     updatedAt: serverTimestamp(),
   });
   audit(batch, clientId, `post.${status}`, post.id);
-  await batch.commit();
+  try {
+    await batch.commit();
+  } catch (error) {
+    if (error.code === "permission-denied")
+      throw Error(
+        "Post could not be changed. If it is scheduled, cancel its schedule first.",
+      );
+    throw error;
+  }
 }
 export async function activity() {
   return (
@@ -130,3 +141,35 @@ export async function activity() {
     )
   ).docs.map((s) => ({ id: s.id, ...s.data() }));
 }
+
+async function schedulingRequest(data) {
+  const token = await auth.currentUser.getIdToken();
+  const response = await fetch("/.netlify/functions/pilot-schedule", {
+    method: data ? "POST" : "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(data ? { "Content-Type": "application/json" } : {}),
+    },
+    ...(data ? { body: JSON.stringify(data) } : {}),
+  });
+  let result;
+  try {
+    result = await response.json();
+  } catch {
+    throw Error(
+      "The pilot scheduling service is not available on this preview.",
+    );
+  }
+  if (!response.ok) throw Error(result.error || "Scheduling request failed.");
+  return result;
+}
+export const schedules = () => schedulingRequest();
+export const schedulePost = (postId, publishAt) =>
+  schedulingRequest({
+    action: "schedule",
+    clientId: pilotClientId,
+    postId,
+    publishAt,
+  });
+export const cancelSchedule = (jobId) =>
+  schedulingRequest({ action: "cancel", clientId: pilotClientId, jobId });

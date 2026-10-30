@@ -8,7 +8,8 @@ import {
 } from "firebase/auth";
 import { auth, configured, authReady } from "./firebase";
 import * as repo from "./repository";
-import { initialClients, modules } from "./domain";
+import { initialClients, modules, pilotClientId } from "./domain";
+import { renderScheduler } from "./scheduler-view";
 const app = document.querySelector("#app");
 let state = {
   user: null,
@@ -135,23 +136,41 @@ async function render() {
     }
   }
   if (state.tab === "social") {
-    view.innerHTML = `<p class="lede">A considered workflow, from first draft to human approval.</p><div class="banner">Metricool and Meta are not connected. Scheduling, analytics, AI monitoring and autonomous engagement are awaiting integration.</div><label>Client<select id="social-client"><option value="">Choose a client</option>${state.clients.map((x) => `<option value="${x.id}" ${c?.id === x.id ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select></label>${c ? '<div class="columns"><section class="panel"><h2>Create a draft</h2><form id="draft"><label>Channel<select name="platform"><option value="facebook">Facebook</option><option value="instagram">Instagram</option></select></label><label>Post copy<textarea name="text" maxlength="2200" rows="8" required></textarea></label><button>Save draft →</button></form></section><section class="panel"><h2>Review queue</h2><div id="posts">Loading…</div></section></div>' : '<section class="panel">Choose a client to create and review social drafts.</section>'}`;
+    view.innerHTML = `<p class="lede">A considered workflow, from first draft to human approval.</p><div class="banner">Esk Cheap Shop pilot · Direct Meta publishing. Automatic publication stays off until account access and staging tests are verified.</div><label>Client<select id="social-client"><option value="">Choose a client</option>${state.clients
+      .filter((x) => x.id === pilotClientId)
+      .map(
+        (x) =>
+          `<option value="${x.id}" ${c?.id === x.id ? "selected" : ""}>${esc(x.name)}</option>`,
+      )
+      .join(
+        "",
+      )}</select></label>${c?.id === pilotClientId ? '<div class="columns"><section class="panel"><h2>Create a draft</h2><form id="draft"><label>Channel<select name="platform"><option value="facebook">Facebook</option><option value="instagram">Instagram</option></select></label><label>Image from brand library<select name="assetId" id="post-asset"><option value="">No image (Facebook text only)</option></select></label><label>Post copy<textarea name="text" maxlength="2200" rows="8" required></textarea></label><button>Save draft →</button></form></section><section class="panel"><h2>Review queue</h2><div id="posts">Loading…</div></section></div>' : '<section class="panel">Choose a client to create and review social drafts.</section>'}`;
     document.querySelector("#social-client").onchange = (e) => {
       state.selected = e.target.value;
       render();
     };
-    if (c) {
+    if (c?.id === pilotClientId) {
       document.querySelector("#draft").onsubmit = execute(async (e) => {
         await repo.saveDraft(c.id, Object.fromEntries(new FormData(e.target)));
         await render();
         notice("Draft saved.");
+      });
+      const images = (await repo.assets(c.id)).filter(
+        (a) => a.contentType === "image/jpeg",
+      );
+      const select = document.querySelector("#post-asset");
+      images.forEach((a) => {
+        const option = document.createElement("option");
+        option.value = a.id;
+        option.textContent = a.name;
+        select.append(option);
       });
       const posts = await repo.posts(c.id);
       document.querySelector("#posts").innerHTML = posts.length
         ? posts
             .map(
               (p, i) =>
-                `<article class="post"><span class="pill">${esc(p.platform)} · ${esc(p.status.replaceAll("_", " "))}</span><p class="post-copy">${esc(p.text)}</p>${(p.status ===
+                `<article class="post"><span class="pill">${esc(p.platform)} · ${esc(p.status.replaceAll("_", " "))}</span><p class="post-copy">${esc(p.text)}</p>${p.assetId ? `<small>Image: ${esc(images.find((a) => a.id === p.assetId)?.name || "Unavailable image")}</small><button class="secondary" data-review-image="${i}">Download image for review</button>` : "<small>No image</small>"}${(p.status ===
                 "draft"
                   ? [["pending_approval", "Send for approval"]]
                   : p.status === "pending_approval"
@@ -167,7 +186,7 @@ async function render() {
                   )
                   .join(
                     "",
-                  )}${p.status === "approved" ? "<small>Approved for scheduling. Provider connection required.</small>" : ""}</article>`,
+                  )}${p.status === "approved" ? "<small>Approved. Use the schedule below to choose a publication time.</small>" : ""}</article>`,
             )
             .join("")
         : "<p>No drafts yet.</p>";
@@ -182,6 +201,20 @@ async function render() {
             await render();
           })),
       );
+      document.querySelectorAll("[data-review-image]").forEach(
+        (b) =>
+          (b.onclick = execute(async () => {
+            const asset = images.find(
+              (a) => a.id === posts[Number(b.dataset.reviewImage)].assetId,
+            );
+            if (!asset) throw Error("This post image is no longer available.");
+            await repo.downloadAsset(asset);
+          })),
+      );
+      const scheduler = document.createElement("section");
+      scheduler.className = "panel";
+      view.append(scheduler);
+      await renderScheduler(scheduler, posts);
     }
   }
   if (state.tab === "activity") {
@@ -191,7 +224,10 @@ async function render() {
   if (state.tab === "settings")
     view.innerHTML = `<section class="panel"><h2>Connection status</h2>${[
       ["Firebase", "Web app configured; authenticated access required"],
-      ["Metricool", "Not connected · Server-side credentials required"],
+      [
+        "Meta publishing",
+        "Esk Cheap Shop pilot · Connection and staging verification pending",
+      ],
       ["Meta engagement", "Not connected · Approved API permissions required"],
       ["AI assistance", "Not connected · Provider and review policy required"],
     ]
@@ -220,6 +256,8 @@ if (configured)
     try {
       state.member = await repo.membership();
       state.clients = await repo.clients();
+      state.selected =
+        state.clients.find((c) => c.id === pilotClientId)?.id || null;
       await render();
     } catch (e) {
       login();

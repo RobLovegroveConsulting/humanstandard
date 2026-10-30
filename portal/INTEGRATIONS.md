@@ -25,9 +25,10 @@ Direct Meta publishing is the primary integration route to investigate and imple
 - Allow rescheduling/cancellation before execution, handle a cancellation racing an in-flight request explicitly, and invalidate approval whenever copy/media/channel changes. Notify operators about expired access and failed publication.
 - Acceptance requires unattended timed publication on authorised test accounts, browser closed, plus duplicate-worker, ambiguous-timeout, token-revocation, cancellation, rescheduling, media-processing and partial-channel failure tests. Real-client activation requires approval after staging verification.
 
-Current status: specification updated; queue worker and direct Meta adapter are not implemented or connected. Existing draft/approval foundation does not yet publish.
+Current status: an Esk Cheap Shop-only queue worker, direct Meta adapter, schedule API and portal controls are implemented in development. They are not deployed or connected; live publishing is disabled. `PILOT.md` records formats, validation, limitations and the activation checkpoints. The other two clients remain deferred.
 
 Official references checked:
+
 - https://www.postman.com/meta/instagram/documentation/6yqw8pt/instagram-api
 - https://developers.facebook.com/docs/pages-api/posts/ (retrieval rate-limited during this check; verify endpoint details before implementation)
 - https://docs.netlify.com/build/functions/scheduled-functions/

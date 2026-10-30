@@ -30,9 +30,9 @@ service cloud.firestore {
    }
    match /posts/{id} {
     allow read: if member(w);
-    function valid() { return stamped() && request.resource.data.keys().hasOnly(['text','platform','status','createdBy','updatedBy','updatedAt']) && request.resource.data.text is string && request.resource.data.text.size()>0 && request.resource.data.text.size()<=2200 && request.resource.data.platform in ['facebook','instagram']; }
+    function valid() { return stamped() && request.resource.data.keys().hasOnly(['text','platform','assetId','status','createdBy','updatedBy','updatedAt']) && request.resource.data.text is string && request.resource.data.text.size()>0 && request.resource.data.text.size()<=2200 && request.resource.data.platform in ['facebook','instagram'] && (!('assetId' in request.resource.data) || request.resource.data.assetId == null || (request.resource.data.assetId is string && request.resource.data.assetId.matches('^[A-Za-z0-9_-]{1,128}$'))); }
     allow create: if editor(w) && valid() && request.resource.data.status=='draft' && request.resource.data.createdBy==request.auth.uid;
-    allow update: if editor(w) && valid() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedBy','updatedAt']) && (
+    allow update: if editor(w) && valid() && (!exists(/databases/$(database)/documents/workspaces/$(w)/publishJobs/$(c+'_'+id)) || get(/databases/$(database)/documents/workspaces/$(w)/publishJobs/$(c+'_'+id)).data.status == 'cancelled') && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedBy','updatedAt']) && (
       (resource.data.status=='draft' && request.resource.data.status=='pending_approval') ||
       (resource.data.status=='pending_approval' && request.resource.data.status in ['approved','draft']) ||
       (resource.data.status=='approved' && request.resource.data.status=='draft'));
